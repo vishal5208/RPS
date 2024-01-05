@@ -4,7 +4,7 @@ import CreateGame from './CreateGame';
 import JoinGame from './JoinGame';
 import ResolveGame from './ResolveGame';
 import TimeoutModal from './TimeoutModal';
-import { Link } from 'react-router-dom';
+import GameHistory from './GameHistory';
 
 const Home = () => {
     const [isCreateGameModalOpen, setCreateGameModalOpen] = useState(false);
@@ -15,31 +15,24 @@ const Home = () => {
     const handleOpenCreateGameModal = () => {
         setCreateGameModalOpen(true);
     };
-
     const handleCloseCreateGameModal = () => {
         setCreateGameModalOpen(false);
     };
-
     const handleOpenJoinGameModal = () => {
         setJoinGameModalOpen(true);
     };
-
     const handleCloseJoinGameModal = () => {
         setJoinGameModalOpen(false);
     };
-
     const handleOpenResolveGameModal = () => {
         setResolveGameModalOpen(true);
     };
-
     const handleCloseResolveGameModal = () => {
         setResolveGameModalOpen(false);
     };
-
     const handleTimeoutOpen = () => {
         setJ1TimeoutOpen(true);
     };
-
     const handleTimeoutClose = () => {
         setJ1TimeoutOpen(false);
     };
@@ -103,6 +96,8 @@ const Home = () => {
                     </Grid>
                 ))}
             </Grid>
+
+            <GameHistory />
 
             <CreateGame open={isCreateGameModalOpen} handleClose={handleCloseCreateGameModal} />
 

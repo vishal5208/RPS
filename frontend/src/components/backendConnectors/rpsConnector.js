@@ -150,7 +150,7 @@ export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
             const userAddress = await signer.getAddress();
 
             const len = await contract.getGamesLength();
-            const timeoutInSeconds = timeoutInMinutes * 60;
+            const timeoutInSeconds = timeout * 60;
 
             const c1Hash = await contract.hash(move, len.toString());
             const stake = ethers.utils.parseEther(stakeAmount);
@@ -258,6 +258,8 @@ export const solve = async (move, gameId) => {
     }
 };
 
+
+
 export const timeoutFunc = async (gameId, timeoutType) => {
 
     console.log("in game")
@@ -298,7 +300,49 @@ export const timeoutFunc = async (gameId, timeoutType) => {
     }
 };
 
+export const gameHistory = async () => {
+    try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const contract = new ethers.Contract(
+            contractAddress,
+            contractAbi,
+            provider
+        );
 
+
+        const gamesLength = await contract.getGamesLength();
+        const gamesArray = [];
+
+        for (let i = 0; i < gamesLength; i++) {
+            const game = await contract.games(i);
+            gamesArray.push(game);
+        }
+
+
+        return {
+            success: true,
+            games: gamesArray
+        };
+
+    } catch (error) {
+        return {
+            success: false,
+            msg: error.message,
+        };
+    }
+};
+
+export const getContract = async () => {
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const contract = new ethers.Contract(
+        contractAddress,
+        contractAbi,
+        provider
+    );
+
+    return contract;
+};
 
 export const getAllProperties = async () => {
     try {
