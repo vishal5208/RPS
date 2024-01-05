@@ -46,9 +46,11 @@ const Home = () => {
 
     return (
         <div>
-            <Typography variant="h3" style={{ marginBottom: '20px' }}>
+
+            <Typography variant="h3" style={{ marginBottom: '20px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 Welcome to Rock, Paper, Scissors, Spock, Lizard Game Center
             </Typography>
+
             <Grid container spacing={2} alignItems="center" justifyContent="center">
                 {[1, 2, 3, 4].map((index) => (
                     <Grid key={index} item xs={12} md={6}>
@@ -76,6 +78,7 @@ const Home = () => {
                                                 ? handleOpenResolveGameModal
                                                 : handleTimeoutOpen
                                 }
+                                style={{ fontSize: '1.2rem' }}
                             >
                                 {index === 1
                                     ? 'Start a New Game'
@@ -85,7 +88,8 @@ const Home = () => {
                                             ? 'Resolve an Ongoing Game'
                                             : 'Timeout Resolution'}
                             </Button>
-                            <Typography variant="body1" style={{ marginLeft: '10px' }}>
+                            <Typography variant="body1" style={{ marginLeft: '10px', fontSize: '1.2rem', lineHeight: '1.2' }}>
+
                                 {index === 1
                                     ? 'Challenge someone by creating a new game. Select your move and wait for an opponent to join.'
                                     : index === 2
