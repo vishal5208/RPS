@@ -8,6 +8,10 @@ import {
     Button,
     TextField,
     styled,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
 } from '@mui/material';
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
@@ -23,15 +27,18 @@ const CreateGame = ({ open, handleClose, createGame }) => {
     const [commitment, setCommitment] = useState(null);
     const [opponentAddress, setOpponentAddress] = useState('');
     const [stakeAmount, setStakeAmount] = useState('');
+    const [timeoutOption, setTimeoutOption] = useState(1);
+    const [customTimeout, setCustomTimeout] = useState('');
 
     const handleCreateGame = () => {
+        const selectedTimeout = timeoutOption === 0 ? customTimeout : timeoutOption;
         console.log('Creating game...');
         console.log('Commitment:', commitment);
         console.log('Opponent Address:', opponentAddress);
         console.log('Stake Amount:', stakeAmount);
+        console.log('Timeout:', selectedTimeout);
 
-
-
+        // createGame(commitment, opponentAddress, stakeAmount, selectedTimeout);
         handleClose();
     };
 
@@ -49,7 +56,7 @@ const CreateGame = ({ open, handleClose, createGame }) => {
                 </Typography>
             </StyledDialogTitle>
             <StyledDialogContent>
-                <Typography variant="h6" color="textPrimary">
+                <Typography variant="h6" color="textPrimary" gutterBottom>
                     Select Move:
                 </Typography>
                 <div>
@@ -79,6 +86,29 @@ const CreateGame = ({ open, handleClose, createGame }) => {
                     fullWidth
                     margin="dense"
                 />
+                <FormControl fullWidth margin="dense">
+                    <InputLabel id="timeout-label">Timeout (in minutes)</InputLabel>
+                    <Select
+                        labelId="timeout-label"
+                        id="timeout-select"
+                        value={timeoutOption}
+                        onChange={(e) => setTimeoutOption(e.target.value)}
+                    >
+                        <MenuItem value={1}>1 minute</MenuItem>
+                        <MenuItem value={2}>2 minutes</MenuItem>
+                        <MenuItem value={4}>4 minutes</MenuItem>
+                        <MenuItem value={0}>Custom</MenuItem>
+                    </Select>
+                </FormControl>
+                {timeoutOption === 0 && (
+                    <TextField
+                        label="Custom Timeout (in minutes)"
+                        value={customTimeout}
+                        onChange={(e) => setCustomTimeout(e.target.value)}
+                        fullWidth
+                        margin="dense"
+                    />
+                )}
             </StyledDialogContent>
             <DialogActions>
                 <Button
