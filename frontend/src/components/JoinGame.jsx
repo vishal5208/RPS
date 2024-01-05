@@ -70,7 +70,7 @@ const JoinGame = ({ open, handleClose }) => {
             <StyledDialogContent theme={theme}>
                 <form onSubmit={handleSubmit}>
                     <TextField
-                        label="Game ID / Opponent's Address"
+                        label="Game ID"
                         value={gameId}
                         onChange={(e) => setGameId(e.target.value)}
                         fullWidth

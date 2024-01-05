@@ -108,14 +108,17 @@ contract RPS is ReentrancyGuard {
         require(!game.resolved, "Game already resolved");
         require(hash(uint8(_c1), _gameId) == game.c1Hash);
 
-        if (win(c1(_gameId), game.c2))
-            payable(game.j1).transfer(2 * game.stake);
-        else if (win(game.c2, c1(_gameId)))
-            payable(game.j2).transfer(2 * game.stake);
-        else {
-            payable(game.j1).transfer(game.stake);
-            payable(game.j2).transfer(game.stake);
+        if (win(c1(_gameId), game.c2)) {
+            require(safeTransfer(game.j1, 2 * game.stake));
+        } else if (win(game.c2, c1(_gameId))) {
+            require(safeTransfer(game.j2, 2 * game.stake));
+        } else {
+            require(safeTransfer(game.j1, game.stake));
+            require(safeTransfer(game.j2, game.stake));
         }
+
+        game.resolved = true;
+        game.stake = 0;
 
         emit GameResolved(
             _gameId,
@@ -125,8 +128,6 @@ contract RPS is ReentrancyGuard {
             msg.sender,
             block.timestamp
         );
-        game.resolved = true;
-        game.stake = 0;
     }
 
     function j1Timeout(
@@ -137,12 +138,13 @@ contract RPS is ReentrancyGuard {
         require(game.c2 != Move.Null, "J2 should have played already");
         require(!game.resolved, "Game already resolved");
         require(
-            block.timestamp > games[_gameId].lastAction + game.timeout,
+            block.timestamp > game.lastAction + game.timeout,
             "Game not over yet"
         );
 
-        payable(games[_gameId].j2).transfer(2 * games[_gameId].stake);
-        games[_gameId].resolved = true;
+        require(safeTransfer(game.j2, 2 * game.stake));
+
+        game.resolved = true;
         game.stake = 0;
 
         emit GameResolved(
@@ -163,12 +165,13 @@ contract RPS is ReentrancyGuard {
         require(game.c2 == Move.Null, "J2 should not have played already");
         require(!game.resolved, "Game already resolved");
         require(
-            block.timestamp > games[_gameId].lastAction + game.timeout,
+            block.timestamp > game.lastAction + game.timeout,
             "Game not over yet"
         );
 
-        payable(games[_gameId].j1).transfer(games[_gameId].stake);
-        games[_gameId].resolved = true;
+        require(safeTransfer(game.j1, game.stake));
+
+        game.resolved = true;
         game.stake = 0;
 
         emit GameResolved(
@@ -190,6 +193,11 @@ contract RPS is ReentrancyGuard {
         else if (_c1 == Move.Null) return false;
         else if (uint(_c1) % 2 == uint(_c2) % 2) return (_c1 < _c2);
         else return (_c1 > _c2);
+    }
+
+    function safeTransfer(address to, uint256 amount) internal returns (bool) {
+        (bool success, ) = payable(to).call{value: amount}("");
+        return success;
     }
 
     // getter functions
