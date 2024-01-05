@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { gameHistory, getContract } from './backendConnectors/rpsConnector';
 import { Card, CardContent, Typography, Divider, Grid } from '@mui/material';
+import { utils } from 'ethers';
+
 
 const GameHistory = () => {
     const [games, setGames] = useState([]);
@@ -73,7 +75,7 @@ const GameHistory = () => {
         }
 
         return chunkedGames.reverse().map((row, rowIndex) => (
-            <Grid key={rowIndex} container spacing={2} justifyContent="center">
+            <Grid key={rowIndex} container spacing={2} marginBottom={2} justifyContent="center">
                 {row.slice().reverse().map((game, colIndex) => (
                     <Grid key={game.gameId} item xs={12} sm={6} md={4} lg={4} xl={4}>
                         <Card sx={{
@@ -87,9 +89,8 @@ const GameHistory = () => {
                                 <Divider sx={{ marginBottom: 1 }} />
                                 <Typography sx={{ marginBottom: 1 }}>P1: {truncateAddress(game?.j1?.toString())}</Typography>
                                 <Typography sx={{ marginBottom: 1 }}>P2: {truncateAddress(game?.j2?.toString())}</Typography>
-                                <Typography sx={{ marginBottom: 1 }}>Stake: {game?.stake?.toString()}</Typography>
-                                <Typography sx={{ marginBottom: 1 }}>Address: {truncateAddress(game?.address)}</Typography>
-                                <Typography sx={{ marginBottom: 1 }}>Timeout: {game?.timeout?.toString()}</Typography>
+                                <Typography sx={{ marginBottom: 1 }}>Stake: {utils.formatEther(game?.stake)} ETH</Typography>
+                                <Typography sx={{ marginBottom: 1 }}>Timeout: {Math.floor(game?.timeout / 60)} minutes</Typography>
                                 <Typography sx={{ marginBottom: 1 }}>Last Action: {new Date(game?.lastAction * 1000).toLocaleString()}</Typography>
                                 <Typography sx={{ marginBottom: 1 }}>Resolved: {game?.resolved ? 'Yes' : 'No'}</Typography>
                                 {/* You may need to handle displaying c1Hash and c2 depending on their types */}
