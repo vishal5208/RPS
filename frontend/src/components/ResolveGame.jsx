@@ -10,6 +10,7 @@ import {
     styled,
     useTheme, // Import useTheme hook
 } from '@mui/material';
+import { solve } from './backendConnectors/rpsConnector';
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main, // Use primary theme color
@@ -25,20 +26,30 @@ const ResolveGameModal = ({ open, handleClose }) => {
     const [gameId, setGameId] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const theme = useTheme(); // Use the useTheme hook to access the primary theme
+    const theme = useTheme();
+
+
+    const Moves = {
+        Rock: 1,
+        Paper: 2,
+        Scissors: 3,
+        Spock: 4,
+        Lizard: 5,
+    };
 
     const handleResolveGame = async () => {
         try {
             setLoading(true);
-            // Add your logic here to handle the resolution with move and gameId
+            const j1Move = Moves[move]
+
             console.log('Move:', move);
             console.log('Game ID:', gameId);
-            // Implement the actual resolution logic or call the resolveGame function
-            // resolveGame(move, gameId);
+            const res = await solve(j1Move, gameId);
+
             handleClose();
         } catch (error) {
             console.error('Error resolving game:', error);
-            // Handle error appropriately (show an error message, etc.)
+
         } finally {
             setLoading(false);
         }

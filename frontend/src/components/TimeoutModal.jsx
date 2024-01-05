@@ -14,6 +14,7 @@ import {
     Select,
     MenuItem,
 } from '@mui/material';
+import { timeoutFunc } from './backendConnectors/rpsConnector';
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -35,9 +36,9 @@ const TimeoutModal = ({ open, handleClose }) => {
         try {
             setLoading(true);
             console.log('Timeout Type:', timeoutType);
+
             console.log('Game ID:', gameId);
-            // Implement the actual timeout logic or call the appropriate timeout function
-            // handleTimeout(timeoutType, gameId);
+            const res = await timeoutFunc(gameId, timeoutType);
             handleClose();
         } catch (error) {
             console.error(`Error handling ${timeoutType} timeout:`, error);

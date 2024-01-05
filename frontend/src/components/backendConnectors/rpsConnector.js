@@ -128,6 +128,8 @@ export const getPropertyDetails = async () => {
 
 export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
 
+
+
     console.log("in game")
     try {
         const { success: connectSuccess } = await requestAccount();
@@ -135,6 +137,7 @@ export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
         if (connectSuccess) {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
+
 
             // Initialize your contract
             const contract = new ethers.Contract(
@@ -147,11 +150,12 @@ export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
             const userAddress = await signer.getAddress();
 
             const len = await contract.getGamesLength();
+            const timeoutInSeconds = timeoutInMinutes * 60;
 
             const c1Hash = await contract.hash(move, len.toString());
             const stake = ethers.utils.parseEther(stakeAmount);
 
-            const tx = await contract.createGame(c1Hash, opponentAddr, timeout, { value: stake.toString() });
+            const tx = await contract.createGame(c1Hash, opponentAddr, timeoutInSeconds, { value: stake.toString() });
             await tx.wait()
 
 
@@ -172,6 +176,129 @@ export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
         };
     }
 };
+
+export const play = async (gameId, c2Move, stakeAmount) => {
+
+    console.log("in game")
+    try {
+        const { success: connectSuccess } = await requestAccount();
+
+        if (connectSuccess) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+
+            // Initialize your contract
+            const contract = new ethers.Contract(
+                contractAddress,
+                contractAbi,
+                signer
+            );
+
+            const stake = ethers.utils.parseEther(stakeAmount);
+
+            const tx = await contract.play(gameId, c2Move, { value: stake.toString() });
+            await tx.wait()
+
+
+            return {
+                success: true,
+                message: 'Enterd into Game successfully!',
+            };
+        } else {
+            return {
+                success: false,
+                message: 'Please connect your wallet!',
+            };
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+        };
+    }
+};
+
+export const solve = async (move, gameId) => {
+
+    console.log("in game")
+    try {
+        const { success: connectSuccess } = await requestAccount();
+
+        if (connectSuccess) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+
+            // Initialize  contract
+            const contract = new ethers.Contract(
+                contractAddress,
+                contractAbi,
+                signer
+            );
+
+
+            const tx = await contract.solve(move, gameId);
+            await tx.wait()
+
+
+            return {
+                success: true,
+                message: 'Game Solved successfully!',
+            };
+        } else {
+            return {
+                success: false,
+                message: 'Please connect your wallet!',
+            };
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+        };
+    }
+};
+
+export const timeoutFunc = async (gameId, timeoutType) => {
+
+    console.log("in game")
+    try {
+        const { success: connectSuccess } = await requestAccount();
+
+        if (connectSuccess) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+
+            // Initialize  contract
+            const contract = new ethers.Contract(
+                contractAddress,
+                contractAbi,
+                signer
+            );
+
+
+            const tx = await contract.solve(move, timeoutType); // based on type handle
+            await tx.wait()
+
+
+            return {
+                success: true,
+                message: 'Game Solved successfully!',
+            };
+        } else {
+            return {
+                success: false,
+                message: 'Please connect your wallet!',
+            };
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+        };
+    }
+};
+
+
 
 export const getAllProperties = async () => {
     try {

@@ -10,6 +10,8 @@ import {
     styled,
     useTheme,
 } from '@mui/material';
+import { play } from './backendConnectors/rpsConnector';
+
 
 // const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
 //     padding: theme.spacing(2),
@@ -37,18 +39,32 @@ const JoinGame = ({ open, handleClose }) => {
         setSelectedMove(move);
     };
 
-    const handleSubmit = () => {
+    const Moves = {
+        Rock: 1,
+        Paper: 2,
+        Scissors: 3,
+        Spock: 4,
+        Lizard: 5,
+    };
+
+
+    const handleSubmit = async () => {
         console.log('Joining game...');
         console.log('Game ID / Opponent\'s Address:', gameId);
         console.log('Selected Move:', selectedMove);
         console.log('Stake Amount:', stakeAmount);
+
+        const move = Moves[selectedMove];
+
+        const res = await play(gameId, move, stakeAmount);
+
         setGameId('');
         setSelectedMove('');
         setStakeAmount('');
         handleClose();
     };
 
-    const moves = ['Rock', 'Paper', 'Scissors', 'Spock', 'Lizard'];
+    const moveNames = ['Rock', 'Paper', 'Scissors', 'Spock', 'Lizard'];
 
     return (
         <Dialog open={open} onClose={handleClose}>
@@ -68,7 +84,7 @@ const JoinGame = ({ open, handleClose }) => {
                     />
                     <Typography variant="subtitle1">Select Move:</Typography>
                     <div>
-                        {moves.map((move) => (
+                        {moveNames.map((move) => (
                             <Button
                                 key={move}
                                 variant={selectedMove === move ? 'contained' : 'outlined'}
