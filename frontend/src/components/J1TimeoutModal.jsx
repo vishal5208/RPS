@@ -20,60 +20,36 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
     padding: theme.spacing(2),
 }));
 
-const ResolveGameModal = ({ open, handleClose }) => {
-    const [move, setMove] = useState('');
+const J1TimeoutModal = ({ open, handleClose }) => {
     const [gameId, setGameId] = useState('');
     const [loading, setLoading] = useState(false);
 
     const theme = useTheme(); // Use the useTheme hook to access the primary theme
 
-    const handleResolveGame = async () => {
+    const handleJ1Timeout = async () => {
         try {
             setLoading(true);
-            // Add your logic here to handle the resolution with move and gameId
-            console.log('Move:', move);
+            // Add your logic here to handle the J1 Timeout with the gameId
             console.log('Game ID:', gameId);
-            // Implement the actual resolution logic or call the resolveGame function
-            // resolveGame(move, gameId);
+            // Implement the actual J1 Timeout logic or call the j1Timeout function
+            // j1Timeout(gameId);
             handleClose();
         } catch (error) {
-            console.error('Error resolving game:', error);
+            console.error('Error handling J1 timeout:', error);
             // Handle error appropriately (show an error message, etc.)
         } finally {
             setLoading(false);
         }
     };
 
-    const handleMoveClick = (selectedMove) => {
-        setMove(selectedMove);
-    };
-
-    const moveNames = ['Rock', 'Paper', 'Scissors', 'Spock', 'Lizard'];
-
     return (
         <Dialog open={open} onClose={handleClose}>
             <StyledDialogTitle theme={theme}>
                 <Typography variant="h4" color="inherit">
-                    Resolve Game
+                    J1 Timeout
                 </Typography>
             </StyledDialogTitle>
             <StyledDialogContent>
-                <Typography variant="body1" color="textPrimary" gutterBottom>
-                    Select Move:
-                </Typography>
-                <div>
-                    {moveNames.map((moveName) => (
-                        <Button
-                            key={moveName}
-                            variant={move === moveName ? 'contained' : 'outlined'}
-                            color="primary"
-                            onClick={() => handleMoveClick(moveName)}
-                            style={{ margin: '8px' }}
-                        >
-                            {moveName}
-                        </Button>
-                    ))}
-                </div>
                 <TextField
                     label="Game ID"
                     value={gameId}
@@ -85,11 +61,11 @@ const ResolveGameModal = ({ open, handleClose }) => {
             <DialogActions>
                 <Button
                     variant="contained"
-                    onClick={handleResolveGame}
-                    color="primary"
-                    disabled={loading || !move || !gameId}
+                    onClick={handleJ1Timeout}
+                    color="primary" // Use primary theme color for the button
+                    disabled={loading || !gameId}
                 >
-                    Resolve Game
+                    J1 Timeout
                 </Button>
                 <Button onClick={handleClose} color="secondary">
                     Cancel
@@ -99,4 +75,4 @@ const ResolveGameModal = ({ open, handleClose }) => {
     );
 };
 
-export default ResolveGameModal;
+export default J1TimeoutModal;

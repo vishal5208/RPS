@@ -3,12 +3,15 @@ import { Typography, Button, List, ListItem } from '@mui/material';
 import CreateGame from './CreateGame';
 import JoinGame from './JoinGame';
 import ResolveGame from './ResolveGame';
+import J1TimeoutModal from './J1TimeoutModal';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
     const [isCreateGameModalOpen, setCreateGameModalOpen] = useState(false);
     const [isJoinGameModalOpen, setJoinGameModalOpen] = useState(false);
     const [isResolveGameModalOpen, setResolveGameModalOpen] = useState(false);
+    const [j1TimeoutOpen, setJ1TimeoutOpen] = useState(false);
+
 
 
 
@@ -40,6 +43,15 @@ const Home = () => {
         setResolveGameModalOpen(false);
     };
 
+    const handleJ1TimeoutOpen = () => {
+        setJ1TimeoutOpen(true);
+    };
+
+    const handleJ1TimeoutClose = () => {
+        setJ1TimeoutOpen(false);
+    };
+
+
     return (
         <div>
             <Typography variant="h1">Home Screen</Typography>
@@ -57,6 +69,10 @@ const Home = () => {
                 <Button variant="contained" onClick={() => handleOpenResolveGameModal(1)}>
                     Resolve Game
                 </Button>
+
+                <Button variant="contained" onClick={handleJ1TimeoutOpen}>
+                    J1 Timeout
+                </Button>
             </List>
 
             <CreateGame
@@ -73,7 +89,11 @@ const Home = () => {
                 open={isResolveGameModalOpen}
                 handleClose={handleCloseResolveGameModal}
             />
+            <J1TimeoutModal open={j1TimeoutOpen} handleClose={handleJ1TimeoutClose} />
+
         </div>
+
+
     );
 };
 
