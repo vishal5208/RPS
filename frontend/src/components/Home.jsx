@@ -65,9 +65,10 @@ const Home = () => {
                         Join Game
                     </Button>
                 </ListItem>
-                <Button variant="contained" onClick={() => handleOpenResolveGameModal}>
+                <Button variant="contained" onClick={handleOpenResolveGameModal}>
                     Resolve Game
                 </Button>
+
 
                 <Button variant="contained" onClick={handleTimeoutOpen}>
                     Timeout
