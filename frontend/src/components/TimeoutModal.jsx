@@ -26,7 +26,7 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
 }));
 
 const TimeoutModal = ({ open, handleClose }) => {
-    const [timeoutType, setTimeoutType] = useState('j1');
+    const [timeoutType, setTimeoutType] = useState(0);
     const [gameId, setGameId] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -51,7 +51,7 @@ const TimeoutModal = ({ open, handleClose }) => {
         <Dialog open={open} onClose={handleClose}>
             <StyledDialogTitle theme={theme}>
                 <Typography variant="h4" color="inherit">
-                    {timeoutType === 'j1' ? 'J1 Timeout' : 'J2 Timeout'}
+                    {timeoutType === 'P1' ? 'P1 Timeout' : 'P2 Timeout'}
                 </Typography>
             </StyledDialogTitle>
             <StyledDialogContent>
@@ -63,8 +63,8 @@ const TimeoutModal = ({ open, handleClose }) => {
                         value={timeoutType}
                         onChange={(e) => setTimeoutType(e.target.value)}
                     >
-                        <MenuItem value="j1">J1 Timeout</MenuItem>
-                        <MenuItem value="j2">J2 Timeout</MenuItem>
+                        <MenuItem value={0}>P1 Timeout</MenuItem>
+                        <MenuItem value={1}>P2 Timeout</MenuItem>
                     </Select>
                 </FormControl>
                 <TextField
@@ -82,7 +82,7 @@ const TimeoutModal = ({ open, handleClose }) => {
                     color="primary"
                     disabled={loading || !gameId}
                 >
-                    {timeoutType === 'j1' ? 'J1 Timeout' : 'J2 Timeout'}
+                    {timeoutType === 'P1' ? 'P1 Timeout' : 'P2 Timeout'}
                 </Button>
                 <Button onClick={handleClose} color="secondary">
                     Cancel

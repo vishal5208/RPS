@@ -47,6 +47,8 @@ const GameHistory = () => {
 
         if (contractInstance) {
             contractInstance.on('NewGame', handleNewGameEvent);
+            contractInstance.on('GameResolved', handleNewGameEvent);
+            contractInstance.on('Player2MoveCommitted', handleNewGameEvent);
             fetchGameHistory();
         }
 

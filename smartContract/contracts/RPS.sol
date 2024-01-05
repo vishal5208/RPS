@@ -43,6 +43,11 @@ contract RPS is ReentrancyGuard {
         uint256 stake,
         uint256 timeout
     );
+    event Player2MoveCommitted(
+        uint256 indexed gameId,
+        Move move,
+        uint256 timestamp
+    );
 
     // modifiers
     modifier onlyPlayers(uint256 _gameId) {
@@ -75,12 +80,6 @@ contract RPS is ReentrancyGuard {
             newGame.timeout
         );
     }
-
-    event Player2MoveCommitted(
-        uint256 indexed gameId,
-        Move move,
-        uint256 timestamp
-    );
 
     function play(
         uint256 _gameId,

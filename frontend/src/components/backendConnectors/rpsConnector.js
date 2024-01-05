@@ -277,14 +277,20 @@ export const timeoutFunc = async (gameId, timeoutType) => {
                 signer
             );
 
+            let tx;
+            if (timeoutType == 0) {
+                console.log("hi")
+                tx = await contract.j1Timeout(gameId);
+            } else {
+                tx = await contract.j2Timeout(gameId);
+            }
 
-            const tx = await contract.solve(move, timeoutType); // based on type handle
             await tx.wait()
 
 
             return {
                 success: true,
-                message: 'Game Solved successfully!',
+                message: 'successfully!',
             };
         } else {
             return {

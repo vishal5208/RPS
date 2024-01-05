@@ -51,7 +51,7 @@ const Home = () => {
                             border={1}
                             p={2}
                             borderRadius={5}
-                            height="100%"
+                            height="150px"
                             display="flex"
                             flexDirection="column"
                             justifyContent="space-between"
@@ -82,8 +82,6 @@ const Home = () => {
                                             : 'Timeout Resolution'}
                             </Button>
                             <Typography variant="body1" style={{ marginLeft: '10px', fontSize: '1.2rem', lineHeight: '1.2', textAlign: 'center' }}>
-
-
                                 {index === 1
                                     ? 'Challenge someone by creating a new game. Select your move and wait for an opponent to join.'
                                     : index === 2
@@ -93,6 +91,7 @@ const Home = () => {
                                             : 'Resolve a game due to timeout by entering the game ID. Address situations where players couldn\'t make a move in time.'}
                             </Typography>
                         </Box>
+
                     </Grid>
                 ))}
             </Grid>
