@@ -9,17 +9,12 @@ import {
     DialogActions,
     styled,
     useTheme,
+    CircularProgress,
 } from '@mui/material';
 import { play } from './backendConnectors/rpsConnector';
 
-
-// const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
-//     padding: theme.spacing(2),
-//     fontSize: '1.2rem',
-// }));
-
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-    backgroundColor: theme.palette.primary.main, // Use primary theme color
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
 }));
 
@@ -27,11 +22,11 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
     padding: theme.spacing(2),
 }));
 
-
 const JoinGame = ({ open, handleClose }) => {
     const [gameId, setGameId] = useState('');
     const [selectedMove, setSelectedMove] = useState('');
     const [stakeAmount, setStakeAmount] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const theme = useTheme();
 
@@ -47,21 +42,20 @@ const JoinGame = ({ open, handleClose }) => {
         Lizard: 5,
     };
 
-
     const handleSubmit = async () => {
-        console.log('Joining game...');
-        console.log('Game ID / Opponent\'s Address:', gameId);
-        console.log('Selected Move:', selectedMove);
-        console.log('Stake Amount:', stakeAmount);
-
-        const move = Moves[selectedMove];
-
-        const res = await play(gameId, move, stakeAmount);
-
-        setGameId('');
-        setSelectedMove('');
-        setStakeAmount('');
-        handleClose();
+        try {
+            setLoading(true);
+            const move = Moves[selectedMove];
+            const res = await play(gameId, move, stakeAmount);
+            setGameId('');
+            setSelectedMove('');
+            setStakeAmount('');
+            handleClose();
+        } catch (error) {
+            console.error(`Error handling in handle join game`, error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const moveNames = ['Rock', 'Paper', 'Scissors', 'Spock', 'Lizard'];
@@ -111,8 +105,13 @@ const JoinGame = ({ open, handleClose }) => {
                     variant="contained"
                     onClick={handleSubmit}
                     color="primary"
+                    disabled={loading}
                 >
-                    Join Game
+                    {loading ? (
+                        <CircularProgress size={24} color="inherit" />
+                    ) : (
+                        'Join Game'
+                    )}
                 </Button>
                 <Button onClick={handleClose} color="secondary">
                     Cancel

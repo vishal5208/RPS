@@ -12,7 +12,7 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem,
+    MenuItem, CircularProgress
 } from '@mui/material';
 import { timeoutFunc } from './backendConnectors/rpsConnector';
 
@@ -82,7 +82,11 @@ const TimeoutModal = ({ open, handleClose }) => {
                     color="primary"
                     disabled={loading || !gameId}
                 >
-                    {timeoutType === 'P1' ? 'P1 Timeout' : 'P2 Timeout'}
+                    {loading ? (
+                        <CircularProgress size={24} color="inherit" />
+                    ) : (
+                        timeoutType === 'P1' ? 'P1 Timeout' : 'P2 Timeout'
+                    )}
                 </Button>
                 <Button onClick={handleClose} color="secondary">
                     Cancel

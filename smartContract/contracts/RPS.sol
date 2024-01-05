@@ -126,6 +126,7 @@ contract RPS is ReentrancyGuard {
             block.timestamp
         );
         game.resolved = true;
+        game.stake = 0;
     }
 
     function j1Timeout(

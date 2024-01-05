@@ -11,6 +11,7 @@ import {
     Select,
     MenuItem,
     FormControl,
+    CircularProgress,
     InputLabel,
 } from '@mui/material';
 import { createGame } from './backendConnectors/rpsConnector';
@@ -30,6 +31,7 @@ const CreateGame = ({ open, handleClose }) => {
     const [stakeAmount, setStakeAmount] = useState('');
     const [timeoutOption, setTimeoutOption] = useState(1);
     const [customTimeout, setCustomTimeout] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const Moves = {
         Rock: 1,
@@ -40,18 +42,18 @@ const CreateGame = ({ open, handleClose }) => {
     };
 
     const handleCreateGame = async () => {
-        const selectedTimeout = timeoutOption === 0 ? customTimeout : timeoutOption;
-        const move = Moves[commitment]
-
-        console.log('Creating game...');
-        console.log('Commitment:', move);
-        console.log('Opponent Address:', opponentAddress);
-        console.log('Stake Amount:', stakeAmount);
-        console.log('Timeout:', selectedTimeout);
-
-        const res = await createGame(move, opponentAddress, stakeAmount, selectedTimeout);
-        console.log(res)
-        handleClose();
+        try {
+            setLoading(true)
+            const selectedTimeout = timeoutOption === 0 ? customTimeout : timeoutOption;
+            const move = Moves[commitment]
+            const res = await createGame(move, opponentAddress, stakeAmount, selectedTimeout);
+            console.log(res)
+            handleClose();
+        } catch (error) {
+            console.error(`Error handling in handle create game`, error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleCommitmentClick = (move) => {
@@ -128,9 +130,13 @@ const CreateGame = ({ open, handleClose }) => {
                     variant="contained"
                     onClick={handleCreateGame}
                     color="primary"
-                    disabled={commitment === null}
+                    disabled={commitment === null || loading}
                 >
-                    Create Game
+                    {loading ? (
+                        <CircularProgress size={24} color="inherit" />
+                    ) : (
+                        'Create Game'
+                    )}
                 </Button>
                 <Button onClick={handleClose} color="secondary">
                     Cancel

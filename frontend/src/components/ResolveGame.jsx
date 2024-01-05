@@ -8,12 +8,12 @@ import {
     Button,
     TextField,
     styled,
-    useTheme, // Import useTheme hook
+    useTheme, CircularProgress
 } from '@mui/material';
 import { solve } from './backendConnectors/rpsConnector';
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-    backgroundColor: theme.palette.primary.main, // Use primary theme color
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
 }));
 
@@ -100,7 +100,11 @@ const ResolveGameModal = ({ open, handleClose }) => {
                     color="primary"
                     disabled={loading || !move || !gameId}
                 >
-                    Resolve Game
+                    {loading ? (
+                        <CircularProgress size={24} color="inherit" />
+                    ) : (
+                        'Resolve Game'
+                    )}
                 </Button>
                 <Button onClick={handleClose} color="secondary">
                     Cancel
