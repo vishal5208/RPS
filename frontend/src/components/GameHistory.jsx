@@ -55,6 +55,15 @@ const GameHistory = () => {
         };
     }, [contractInstance]);
 
+    const Moves = {
+        Rock: 1,
+        Paper: 2,
+        Scissors: 3,
+        Spock: 4,
+        Lizard: 5,
+    };
+
+
     const renderGameCards = () => {
         const cardsPerRow = 3;
 
@@ -85,7 +94,7 @@ const GameHistory = () => {
                                 <Typography sx={{ marginBottom: 1 }}>Resolved: {game?.resolved ? 'Yes' : 'No'}</Typography>
                                 {/* You may need to handle displaying c1Hash and c2 depending on their types */}
                                 {/* <Typography sx={{ marginBottom: 1 }}>c1Hash: {game?.c1Hash}</Typography> */}
-                                <Typography sx={{ marginBottom: 1 }}>c2: {game?.c2}</Typography>
+                                <Typography sx={{ marginBottom: 1 }}>P2's move: {game?.c2 === 0 ? "Hasn't played yet." : Object.keys(Moves).find(key => Moves[key] === game?.c2)}</Typography>
                             </CardContent>
                         </Card>
                     </div>
