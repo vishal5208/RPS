@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { gameHistory, getContract } from './backendConnectors/rpsConnector';
-import { Card, CardContent, Typography, Divider } from '@mui/material';
+import { Card, CardContent, Typography, Divider, Grid } from '@mui/material';
 
 const GameHistory = () => {
     const [games, setGames] = useState([]);
@@ -73,9 +73,9 @@ const GameHistory = () => {
         }
 
         return chunkedGames.reverse().map((row, rowIndex) => (
-            <div key={rowIndex} style={{ display: 'flex', marginBottom: 16 }}>
+            <Grid key={rowIndex} container spacing={2} justifyContent="center">
                 {row.slice().reverse().map((game, colIndex) => (
-                    <div key={game.gameId} style={{ marginRight: colIndex < cardsPerRow - 1 ? 2 : 0 }}>
+                    <Grid key={game.gameId} item xs={12} sm={6} md={4} lg={4} xl={4}>
                         <Card sx={{
                             backgroundColor: '#2196F3',
                             color: '#FFFFFF',
@@ -97,18 +97,11 @@ const GameHistory = () => {
                                 <Typography sx={{ marginBottom: 1 }}>P2's move: {game?.c2 === 0 ? "Hasn't played yet." : Object.keys(Moves).find(key => Moves[key] === game?.c2)}</Typography>
                             </CardContent>
                         </Card>
-                    </div>
+                    </Grid>
                 ))}
-            </div>
+            </Grid>
         ));
     };
-
-
-
-
-
-
-
 
     const truncateAddress = (address) => {
 
