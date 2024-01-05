@@ -3,7 +3,7 @@ import { Typography, Button, List, ListItem } from '@mui/material';
 import CreateGame from './CreateGame';
 import JoinGame from './JoinGame';
 import ResolveGame from './ResolveGame';
-import J1TimeoutModal from './J1TimeoutModal';
+import TimeoutModal from './TimeoutModal';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
@@ -33,8 +33,7 @@ const Home = () => {
         setJoinGameModalOpen(false);
     };
 
-    const handleOpenResolveGameModal = (gameId) => {
-
+    const handleOpenResolveGameModal = () => {
         setResolveGameModalOpen(true);
     };
 
@@ -43,11 +42,11 @@ const Home = () => {
         setResolveGameModalOpen(false);
     };
 
-    const handleJ1TimeoutOpen = () => {
+    const handleTimeoutOpen = () => {
         setJ1TimeoutOpen(true);
     };
 
-    const handleJ1TimeoutClose = () => {
+    const handleTimeoutClose = () => {
         setJ1TimeoutOpen(false);
     };
 
@@ -66,12 +65,12 @@ const Home = () => {
                         Join Game
                     </Button>
                 </ListItem>
-                <Button variant="contained" onClick={() => handleOpenResolveGameModal(1)}>
+                <Button variant="contained" onClick={() => handleOpenResolveGameModal}>
                     Resolve Game
                 </Button>
 
-                <Button variant="contained" onClick={handleJ1TimeoutOpen}>
-                    J1 Timeout
+                <Button variant="contained" onClick={handleTimeoutOpen}>
+                    Timeout
                 </Button>
             </List>
 
@@ -89,7 +88,7 @@ const Home = () => {
                 open={isResolveGameModalOpen}
                 handleClose={handleCloseResolveGameModal}
             />
-            <J1TimeoutModal open={j1TimeoutOpen} handleClose={handleJ1TimeoutClose} />
+            <TimeoutModal open={j1TimeoutOpen} handleClose={handleTimeoutClose} />
 
         </div>
 

@@ -9,10 +9,14 @@ import {
     TextField,
     styled,
     useTheme, // Import useTheme hook
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
 } from '@mui/material';
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-    backgroundColor: theme.palette.primary.main, // Use primary theme color
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
 }));
 
@@ -20,23 +24,23 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
     padding: theme.spacing(2),
 }));
 
-const J1TimeoutModal = ({ open, handleClose }) => {
+const TimeoutModal = ({ open, handleClose }) => {
+    const [timeoutType, setTimeoutType] = useState('j1');
     const [gameId, setGameId] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const theme = useTheme(); // Use the useTheme hook to access the primary theme
+    const theme = useTheme();
 
-    const handleJ1Timeout = async () => {
+    const handleTimeout = async () => {
         try {
             setLoading(true);
-            // Add your logic here to handle the J1 Timeout with the gameId
+            console.log('Timeout Type:', timeoutType);
             console.log('Game ID:', gameId);
-            // Implement the actual J1 Timeout logic or call the j1Timeout function
-            // j1Timeout(gameId);
+            // Implement the actual timeout logic or call the appropriate timeout function
+            // handleTimeout(timeoutType, gameId);
             handleClose();
         } catch (error) {
-            console.error('Error handling J1 timeout:', error);
-            // Handle error appropriately (show an error message, etc.)
+            console.error(`Error handling ${timeoutType} timeout:`, error);
         } finally {
             setLoading(false);
         }
@@ -46,10 +50,22 @@ const J1TimeoutModal = ({ open, handleClose }) => {
         <Dialog open={open} onClose={handleClose}>
             <StyledDialogTitle theme={theme}>
                 <Typography variant="h4" color="inherit">
-                    J1 Timeout
+                    {timeoutType === 'j1' ? 'J1 Timeout' : 'J2 Timeout'}
                 </Typography>
             </StyledDialogTitle>
             <StyledDialogContent>
+                <FormControl fullWidth margin="dense">
+                    <InputLabel id="timeout-type-label">Timeout Type</InputLabel>
+                    <Select
+                        labelId="timeout-type-label"
+                        id="timeout-type-select"
+                        value={timeoutType}
+                        onChange={(e) => setTimeoutType(e.target.value)}
+                    >
+                        <MenuItem value="j1">J1 Timeout</MenuItem>
+                        <MenuItem value="j2">J2 Timeout</MenuItem>
+                    </Select>
+                </FormControl>
                 <TextField
                     label="Game ID"
                     value={gameId}
@@ -61,11 +77,11 @@ const J1TimeoutModal = ({ open, handleClose }) => {
             <DialogActions>
                 <Button
                     variant="contained"
-                    onClick={handleJ1Timeout}
-                    color="primary" // Use primary theme color for the button
+                    onClick={handleTimeout}
+                    color="primary"
                     disabled={loading || !gameId}
                 >
-                    J1 Timeout
+                    {timeoutType === 'j1' ? 'J1 Timeout' : 'J2 Timeout'}
                 </Button>
                 <Button onClick={handleClose} color="secondary">
                     Cancel
@@ -75,4 +91,4 @@ const J1TimeoutModal = ({ open, handleClose }) => {
     );
 };
 
-export default J1TimeoutModal;
+export default TimeoutModal;
