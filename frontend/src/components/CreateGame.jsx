@@ -13,6 +13,7 @@ import {
     FormControl,
     InputLabel,
 } from '@mui/material';
+import { createGame } from './backendConnectors/rpsConnector';
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -23,22 +24,33 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
     padding: theme.spacing(2),
 }));
 
-const CreateGame = ({ open, handleClose, createGame }) => {
+const CreateGame = ({ open, handleClose }) => {
     const [commitment, setCommitment] = useState(null);
     const [opponentAddress, setOpponentAddress] = useState('');
     const [stakeAmount, setStakeAmount] = useState('');
     const [timeoutOption, setTimeoutOption] = useState(1);
     const [customTimeout, setCustomTimeout] = useState('');
 
-    const handleCreateGame = () => {
+    const Moves = {
+        Rock: 1,
+        Paper: 2,
+        Scissors: 3,
+        Spock: 4,
+        Lizard: 5,
+    };
+
+    const handleCreateGame = async () => {
         const selectedTimeout = timeoutOption === 0 ? customTimeout : timeoutOption;
+        const move = Moves[commitment]
+
         console.log('Creating game...');
-        console.log('Commitment:', commitment);
+        console.log('Commitment:', move);
         console.log('Opponent Address:', opponentAddress);
         console.log('Stake Amount:', stakeAmount);
         console.log('Timeout:', selectedTimeout);
 
-        // createGame(commitment, opponentAddress, stakeAmount, selectedTimeout);
+        const res = await createGame(move, opponentAddress, stakeAmount, selectedTimeout);
+        console.log(res)
         handleClose();
     };
 

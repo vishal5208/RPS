@@ -1,12 +1,10 @@
 
-const { ethers } = require("ethers");
+import { ethers } from "ethers";
+import contractData from '../../constants/contracts.json';
 
+const contractAddress = contractData.RPS.address;
+const contractAbi = contractData.RPS.abi;
 
-const contractData = require('../../constants/contracts.json');
-
-const contractAddress = contractData.LandRecord.address;
-const contractAbi = contractData.LandRecord.abi;
-const erc20TokenAddress = contractData.LandRecord.tokenAddr;
 
 export const requestAccount = async (metaMask) => {
     try {
@@ -26,7 +24,7 @@ export const requestAccount = async (metaMask) => {
             }
             await provider.request({
                 method: "wallet_switchEthereumChain",
-                params: [{ chainId: "0x13881" }],
+                params: [{ chainId: "0x5" }],
             });
             await provider.request({
                 method: "eth_requestAccounts",
@@ -52,13 +50,13 @@ export const isConnected = async () => {
     try {
         if (window.ethereum) {
             let chainId = window.ethereum.chainId;
-            if (chainId !== "0x13881") {
+            if (chainId !== "0x5") {
                 const temp = await window.provider.request({
                     method: "wallet_switchEthereumChain",
-                    params: [{ chainId: "0x13881" }], // chainId must be in hexadecimal numbers
+                    params: [{ chainId: "0x5" }],
                 });
             }
-            if (chainId === "0x13881") {
+            if (chainId === "0x5") {
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const account = await provider.send("eth_requestAccounts", []);
                 return {
@@ -128,7 +126,9 @@ export const getPropertyDetails = async () => {
     }
 };
 
-export const createProperty = async (propertyData) => {
+export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
+
+    console.log("in game")
     try {
         const { success: connectSuccess } = await requestAccount();
 
@@ -146,18 +146,18 @@ export const createProperty = async (propertyData) => {
             // Get the user's address
             const userAddress = await signer.getAddress();
 
-            // Call the create_land_record function
-            await contract.create_land_record(
-                propertyData.owner_name,
-                parseInt(propertyData.district_id),
-                `${propertyData.house_no}, ${propertyData.area}, ${propertyData.city}, ${propertyData.district}, ${propertyData.state}`,
-                propertyData.owner,
-                propertyData.size
-            );
+            const len = await contract.getGamesLength();
+
+            const c1Hash = await contract.hash(move, len.toString());
+            const stake = ethers.utils.parseEther(stakeAmount);
+
+            const tx = await contract.createGame(c1Hash, opponentAddr, timeout, { value: stake.toString() });
+            await tx.wait()
+
 
             return {
                 success: true,
-                message: 'Property added successfully!',
+                message: 'Game Created successfully!',
             };
         } else {
             return {

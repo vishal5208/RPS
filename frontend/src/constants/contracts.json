@@ -1,6 +1,6 @@
 {
     "RPS": {
-        "address": "0x5020D8cCF2f23ca80Aef51c29151C98DEDc1bf33",
+        "address": "0xdf2D58d1Ec8E9D5e1304DbCcBc26bFB4c6575652",
         "abi": [
             {
                 "anonymous": false,
@@ -178,6 +178,19 @@
                     {
                         "internalType": "uint256",
                         "name": "timeout",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getGamesLength",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
                         "type": "uint256"
                     }
                 ],

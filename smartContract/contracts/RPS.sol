@@ -191,4 +191,9 @@ contract RPS is ReentrancyGuard {
         else if (uint(_c1) % 2 == uint(_c2) % 2) return (_c1 < _c2);
         else return (_c1 > _c2);
     }
+
+    // getter functions
+    function getGamesLength() external view returns (uint) {
+        return games.length;
+    }
 }
