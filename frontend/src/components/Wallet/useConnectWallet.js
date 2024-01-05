@@ -24,8 +24,7 @@ function useConnectWallet() {
 
                 window.ethereum.on("accountsChanged", (accounts) => {
                     if (accounts.length === 0) {
-                        setAccount(null);
-                        setConnectStatus("disconnected");
+                        disconnectWallet();
                     } else {
                         setAccount(accounts[0]);
                         setConnectStatus("connected");
@@ -34,8 +33,7 @@ function useConnectWallet() {
 
                 window.ethereum.on("chainChanged", (chainId) => {
                     setProvider(new ethers.providers.Web3Provider(window.ethereum));
-                    setAccount(null);
-                    setConnectStatus("disconnected");
+                    disconnectWallet();
                 });
             } else {
                 console.log("No Ethereum wallet detected");
@@ -43,6 +41,11 @@ function useConnectWallet() {
         };
         init();
     }, []);
+
+    const disconnectWallet = () => {
+        setAccount(null);
+        setConnectStatus("disconnected");
+    };
 
     const requestAccount = async () => {
         if (window.ethereum) {
@@ -53,16 +56,16 @@ function useConnectWallet() {
                 setAccount(accounts[0]);
                 return { success: true };
             } catch (error) {
-                setConnectStatus("disconnected");
+                disconnectWallet();
                 return { success: false, msg: error.message };
             }
         } else {
-            setConnectStatus("disconnected");
+            disconnectWallet();
             return { success: false, msg: "No Ethereum wallet detected" };
         }
     };
 
-    return { provider, account, requestAccount, connectStatus };
+    return { provider, account, requestAccount, connectStatus, disconnectWallet };
 }
 
 export default useConnectWallet;

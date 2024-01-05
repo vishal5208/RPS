@@ -88,7 +88,8 @@ const Home = () => {
                                             ? 'Resolve an Ongoing Game'
                                             : 'Timeout Resolution'}
                             </Button>
-                            <Typography variant="body1" style={{ marginLeft: '10px', fontSize: '1.2rem', lineHeight: '1.2' }}>
+                            <Typography variant="body1" style={{ marginLeft: '10px', fontSize: '1.2rem', lineHeight: '1.2', textAlign: 'center' }}>
+
 
                                 {index === 1
                                     ? 'Challenge someone by creating a new game. Select your move and wait for an opponent to join.'

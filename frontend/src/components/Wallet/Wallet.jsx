@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Button, Container, Typography, CircularProgress, Snackbar } from "@mui/material";
+import { Button, Container, Typography, CircularProgress, Snackbar, Box } from "@mui/material";
 import useConnectWallet from "./useConnectWallet";
 
 const Wallet = () => {
-    const { account, requestAccount, connectStatus } = useConnectWallet();
+    const { account, requestAccount, connectStatus, disconnectWallet } = useConnectWallet();
     const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -28,6 +28,10 @@ const Wallet = () => {
         }
     };
 
+    const handleDisconnectWallet = () => {
+        disconnectWallet();
+    };
+
     const handleCloseSnackbar = () => {
         setSnackbarOpen(false);
     };
@@ -37,19 +41,17 @@ const Wallet = () => {
             {connectStatus === "disconnected" && (
                 <div
                     style={{
-
                         padding: "0.3rem",
                         borderRadius: "8px",
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "flex-end",
                         justifyContent: "end",
-
                     }}
                 >
-                    <Typography variant="h6" gutterBottom style={{ marginRight: "1rem", color: "white", fontSize: '0rem' }} >
+                    {/* <Typography variant="h6" gutterBottom style={{ marginRight: "1rem", color: "white", fontSize: '1rem' }} >
                         Connect Your Wallet
-                    </Typography>
+                    </Typography> */}
                     <div style={{ marginBottom: "1rem", color: "white" }}>
                         {isLoading && <CircularProgress color="inherit" size={20} style={{ marginRight: "0.5rem" }} />}
                         {errorMsg && <span style={{ color: "#FF5252" }}>{errorMsg}</span>}
@@ -77,6 +79,24 @@ const Wallet = () => {
                 </div>
             )}
 
+            {connectStatus === "connected" && (
+                <Box
+                    style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "flex-end",
+                    }}
+                >
+                    <Typography
+                        variant="body1"
+                        style={{ color: "white", fontSize: '1.2rem', cursor: "pointer" }}
+                        onClick={handleDisconnectWallet}
+                    >
+                        Connected: {account ? `${account.slice(0, 4)}...${account.slice(-4)}` : ""}
+                    </Typography>
+                </Box>
+            )}
             <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={6000}
