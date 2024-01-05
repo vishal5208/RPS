@@ -167,7 +167,7 @@ contract RPS is ReentrancyGuard {
             "Game not over yet"
         );
 
-        payable(games[_gameId].j1).transfer(2 * games[_gameId].stake);
+        payable(games[_gameId].j1).transfer(games[_gameId].stake);
         games[_gameId].resolved = true;
         game.stake = 0;
 
