@@ -11,6 +11,8 @@ import {
     useTheme, CircularProgress
 } from '@mui/material';
 import { solve } from './backendConnectors/rpsConnector';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -62,55 +64,59 @@ const ResolveGameModal = ({ open, handleClose }) => {
     const moveNames = ['Rock', 'Paper', 'Scissors', 'Spock', 'Lizard'];
 
     return (
-        <Dialog open={open} onClose={handleClose}>
-            <StyledDialogTitle theme={theme}>
-                <Typography variant="h4" color="inherit">
-                    Resolve Game
-                </Typography>
-            </StyledDialogTitle>
-            <StyledDialogContent>
-                <Typography variant="body1" color="textPrimary" gutterBottom>
-                    Select Move:
-                </Typography>
-                <div>
-                    {moveNames.map((moveName) => (
-                        <Button
-                            key={moveName}
-                            variant={move === moveName ? 'contained' : 'outlined'}
-                            color="primary"
-                            onClick={() => handleMoveClick(moveName)}
-                            style={{ margin: '8px' }}
-                        >
-                            {moveName}
-                        </Button>
-                    ))}
-                </div>
-                <TextField
-                    label="Game ID"
-                    value={gameId}
-                    onChange={(e) => setGameId(e.target.value)}
-                    fullWidth
-                    margin="dense"
-                />
-            </StyledDialogContent>
-            <DialogActions>
-                <Button
-                    variant="contained"
-                    onClick={handleResolveGame}
-                    color="primary"
-                    disabled={loading || !move || !gameId}
-                >
-                    {loading ? (
-                        <CircularProgress size={24} color="inherit" />
-                    ) : (
-                        'Resolve Game'
-                    )}
-                </Button>
-                <Button onClick={handleClose} color="secondary">
-                    Cancel
-                </Button>
-            </DialogActions>
-        </Dialog>
+        <>
+            <Dialog open={open} onClose={handleClose}>
+                <StyledDialogTitle theme={theme}>
+                    <Typography variant="h4" color="inherit">
+                        Resolve Game
+                    </Typography>
+                </StyledDialogTitle>
+                <StyledDialogContent>
+                    <Typography variant="body1" color="textPrimary" gutterBottom>
+                        Select Move:
+                    </Typography>
+                    <div>
+                        {moveNames.map((moveName) => (
+                            <Button
+                                key={moveName}
+                                variant={move === moveName ? 'contained' : 'outlined'}
+                                color="primary"
+                                onClick={() => handleMoveClick(moveName)}
+                                style={{ margin: '8px' }}
+                            >
+                                {moveName}
+                            </Button>
+                        ))}
+                    </div>
+                    <TextField
+                        label="Game ID"
+                        value={gameId}
+                        onChange={(e) => setGameId(e.target.value)}
+                        fullWidth
+                        margin="dense"
+                    />
+                </StyledDialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        onClick={handleResolveGame}
+                        color="primary"
+                        disabled={loading || !move || !gameId}
+                    >
+                        {loading ? (
+                            <CircularProgress size={24} color="inherit" />
+                        ) : (
+                            'Resolve Game'
+                        )}
+                    </Button>
+                    <Button onClick={handleClose} color="secondary">
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <ToastContainer position="top-left" autoClose={5000} hideProgressBar={false} />
+
+        </>
     );
 };
 

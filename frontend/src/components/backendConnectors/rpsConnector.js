@@ -187,7 +187,7 @@ export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
 
         return {
             success: false,
-            message: error.message,
+            message: reason,
         };
     }
 };
@@ -252,8 +252,6 @@ export const play = async (gameId, c2Move, stakeAmount) => {
 };
 
 export const solve = async (move, gameId) => {
-
-    console.log("in game")
     try {
         const { success: connectSuccess } = await requestAccount();
 
@@ -268,10 +266,10 @@ export const solve = async (move, gameId) => {
                 signer
             );
 
-
             const tx = await contract.solve(move, gameId);
             await tx.wait()
 
+            toast.success('Game Solved successfully!', { position: toast.POSITION.TOP_LEFT, autoClose: 5000, style: { marginTop: '60px', width: '300px' } });
 
             return {
                 success: true,
@@ -284,9 +282,25 @@ export const solve = async (move, gameId) => {
             };
         }
     } catch (error) {
+        let reason = 'An error occurred. Please try again.';
+
+        if (error.data && error.data.reason) {
+            reason = error.data.reason;
+        } else if (error.reason) {
+            reason = error.reason;
+        } else if (error.message && error.message.includes("execution reverted")) {
+            reason = "Transaction failed: Execution reverted";
+        }
+
+        toast.error(reason, {
+            position: toast.POSITION.TOP_LEFT,
+            autoClose: 5000,
+            style: { marginTop: '60px', width: '300px' },
+        });
+
         return {
             success: false,
-            message: error.message,
+            message: reason,
         };
     }
 };
