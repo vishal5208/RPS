@@ -12,6 +12,9 @@ import {
     CircularProgress,
 } from '@mui/material';
 import { play } from './backendConnectors/rpsConnector';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -61,63 +64,71 @@ const JoinGame = ({ open, handleClose }) => {
     const moveNames = ['Rock', 'Paper', 'Scissors', 'Spock', 'Lizard'];
 
     return (
-        <Dialog open={open} onClose={handleClose}>
-            <StyledDialogTitle>
-                <Typography variant="h4" color="inherit">
-                    Join Game
-                </Typography>
-            </StyledDialogTitle>
-            <StyledDialogContent theme={theme}>
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Game ID"
-                        value={gameId}
-                        onChange={(e) => setGameId(e.target.value)}
-                        fullWidth
-                        margin="dense"
-                    />
-                    <Typography variant="subtitle1">Select Move:</Typography>
-                    <div>
-                        {moveNames.map((move) => (
-                            <Button
-                                key={move}
-                                variant={selectedMove === move ? 'contained' : 'outlined'}
-                                color="primary"
-                                onClick={() => handleMoveClick(move)}
-                                style={{ margin: '8px' }}
-                            >
-                                {move}
-                            </Button>
-                        ))}
-                    </div>
-                    <TextField
-                        label="Stake Amount"
-                        value={stakeAmount}
-                        onChange={(e) => setStakeAmount(e.target.value)}
-                        fullWidth
-                        margin="dense"
-                    />
-                </form>
-            </StyledDialogContent>
-            <DialogActions>
-                <Button
-                    type="submit"
-                    variant="contained"
-                    onClick={handleSubmit}
-                    color="primary"
-                    disabled={loading}
-                >
-                    {loading ? (
-                        <CircularProgress size={24} color="inherit" />
-                    ) : (
-                        'Join Game'
-                    )}
-                </Button>
-                <Button onClick={handleClose} color="secondary">
-                    Cancel
-                </Button>
-            </DialogActions>
-        </Dialog>
+        <>
+            <Dialog open={open} onClose={handleClose}>
+                <StyledDialogTitle>
+                    <Typography variant="h4" color="inherit">
+                        Join Game
+                    </Typography>
+                </StyledDialogTitle>
+                <StyledDialogContent theme={theme}>
+                    <form onSubmit={handleSubmit}>
+                        <TextField
+                            label="Game ID"
+                            value={gameId}
+                            onChange={(e) => setGameId(e.target.value)}
+                            fullWidth
+                            margin="dense"
+                        />
+                        <Typography variant="subtitle1">Select Move:</Typography>
+                        <div>
+                            {moveNames.map((move) => (
+                                <Button
+                                    key={move}
+                                    variant={selectedMove === move ? 'contained' : 'outlined'}
+                                    color="primary"
+                                    onClick={() => handleMoveClick(move)}
+                                    style={{ margin: '8px' }}
+                                >
+                                    {move}
+                                </Button>
+                            ))}
+                        </div>
+                        <TextField
+                            label="Stake Amount"
+                            value={stakeAmount}
+                            onChange={(e) => setStakeAmount(e.target.value)}
+                            fullWidth
+                            margin="dense"
+                        />
+                    </form>
+                </StyledDialogContent>
+                <DialogActions>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        onClick={handleSubmit}
+                        color="primary"
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <CircularProgress size={24} color="inherit" />
+                        ) : (
+                            'Join Game'
+                        )}
+                    </Button>
+                    <Button onClick={handleClose} color="secondary">
+                        Cancel
+                    </Button>
+                </DialogActions>
+
+
+            </Dialog>
+
+            <ToastContainer position="top-left" autoClose={5000} hideProgressBar={false} />
+
+        </>
+
     );
 };
 

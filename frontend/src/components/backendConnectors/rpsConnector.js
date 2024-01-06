@@ -1,6 +1,7 @@
 
 import { ethers } from "ethers";
 import contractData from '../../constants/contracts.json';
+import { toast } from 'react-toastify';
 
 const contractAddress = contractData.RPS.address;
 const contractAbi = contractData.RPS.abi;
@@ -178,8 +179,8 @@ export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
 };
 
 export const play = async (gameId, c2Move, stakeAmount) => {
+    console.log("in game");
 
-    console.log("in game")
     try {
         const { success: connectSuccess } = await requestAccount();
 
@@ -197,12 +198,14 @@ export const play = async (gameId, c2Move, stakeAmount) => {
             const stake = ethers.utils.parseEther(stakeAmount);
 
             const tx = await contract.play(gameId, c2Move, { value: stake.toString() });
-            await tx.wait()
+            await tx.wait();
+
+            toast.success('Entered into the game successfully!', { position: toast.POSITION.TOP_LEFT, autoClose: 5000, style: { marginTop: '60px', width: '300px' }, });
 
 
             return {
                 success: true,
-                message: 'Enterd into Game successfully!',
+                message: 'Entered into the game successfully!',
             };
         } else {
             return {
@@ -211,9 +214,25 @@ export const play = async (gameId, c2Move, stakeAmount) => {
             };
         }
     } catch (error) {
+        let reason = 'An error occurred. Please try again.';
+
+        if (error.data && error.data.reason) {
+            reason = error.data.reason;
+        } else if (error.reason) {
+            reason = error.reason;
+        } else if (error.message && error.message.includes("execution reverted")) {
+            reason = "Transaction failed: Execution reverted";
+        }
+
+        toast.error(reason, {
+            position: toast.POSITION.TOP_LEFT,
+            autoClose: 5000,
+            style: { marginTop: '60px', width: '300px' }, // Adjust the width as needed
+        });
+
         return {
             success: false,
-            message: error.message,
+            message: reason,
         };
     }
 };
