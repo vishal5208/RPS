@@ -13,8 +13,6 @@ import {
     FormControl,
     CircularProgress,
     InputLabel,
-    Snackbar,
-    Alert,
 } from '@mui/material';
 import { createGame } from './backendConnectors/rpsConnector';
 
@@ -34,10 +32,6 @@ const CreateGame = ({ open, handleClose }) => {
     const [timeoutOption, setTimeoutOption] = useState(1);
     const [customTimeout, setCustomTimeout] = useState('');
     const [loading, setLoading] = useState(false);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-
 
     const Moves = {
         Rock: 1,
@@ -49,26 +43,14 @@ const CreateGame = ({ open, handleClose }) => {
 
     const handleCreateGame = async () => {
         try {
-            setLoading(true);
+            setLoading(true)
             const selectedTimeout = timeoutOption === 0 ? customTimeout : timeoutOption;
-            const move = Moves[commitment];
+            const move = Moves[commitment]
             const res = await createGame(move, opponentAddress, stakeAmount, selectedTimeout);
-
-            if (res.success) {
-                setSnackbarSeverity('success');
-                setSnackbarMessage('Game created successfully!');
-                setSnackbarOpen(true);
-                handleClose();
-            } else {
-                setSnackbarSeverity('error');
-                setSnackbarMessage('Failed to create game. Please try again.');
-                setSnackbarOpen(true);
-            }
+            console.log(res)
+            handleClose();
         } catch (error) {
-            console.error('Error handling in handle create game', error);
-            setSnackbarSeverity('error');
-            setSnackbarMessage('An unexpected error occurred. Please try again.');
-            setSnackbarOpen(true);
+            console.error(`Error handling in handle create game`, error);
         } finally {
             setLoading(false);
         }
@@ -78,115 +60,89 @@ const CreateGame = ({ open, handleClose }) => {
         setCommitment(move);
     };
 
-    const handleSnackbarClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSnackbarOpen(false);
-    };
-
     const moveNames = ['Rock', 'Paper', 'Scissors', 'Spock', 'Lizard'];
 
     return (
-        <>
-            <Dialog open={open} onClose={handleClose}>
-                <StyledDialogTitle>
-                    <Typography variant="h4" color="inherit">
-                        Create Game
-                    </Typography>
-                </StyledDialogTitle>
-                <StyledDialogContent>
-                    <Typography variant="h6" color="textPrimary" gutterBottom>
-                        Select Move:
-                    </Typography>
-                    <div>
-                        {moveNames.map((moveName) => (
-                            <Button
-                                key={moveName}
-                                variant={commitment === moveName ? 'contained' : 'outlined'}
-                                color="primary"
-                                onClick={() => handleCommitmentClick(moveName)}
-                                style={{ margin: '8px' }}
-                            >
-                                {moveName}
-                            </Button>
-                        ))}
-                    </div>
-                    <TextField
-                        label="Opponent's Address"
-                        value={opponentAddress}
-                        onChange={(e) => setOpponentAddress(e.target.value)}
-                        fullWidth
-                        margin="dense"
-                    />
-                    <TextField
-                        label="Stake Amount"
-                        value={stakeAmount}
-                        onChange={(e) => setStakeAmount(e.target.value)}
-                        fullWidth
-                        margin="dense"
-                    />
-                    <FormControl fullWidth margin="dense">
-                        <InputLabel id="timeout-label">Timeout (in minutes)</InputLabel>
-                        <Select
-                            labelId="timeout-label"
-                            id="timeout-select"
-                            value={timeoutOption}
-                            onChange={(e) => setTimeoutOption(e.target.value)}
+        <Dialog open={open} onClose={handleClose}>
+            <StyledDialogTitle>
+                <Typography variant="h4" color="inherit">
+                    Create Game
+                </Typography>
+            </StyledDialogTitle>
+            <StyledDialogContent>
+                <Typography variant="h6" color="textPrimary" gutterBottom>
+                    Select Move:
+                </Typography>
+                <div>
+                    {moveNames.map((moveName) => (
+                        <Button
+                            key={moveName}
+                            variant={commitment === moveName ? 'contained' : 'outlined'}
+                            color="primary"
+                            onClick={() => handleCommitmentClick(moveName)}
+                            style={{ margin: '8px' }}
                         >
-                            <MenuItem value={1}>1 minute</MenuItem>
-                            <MenuItem value={2}>2 minutes</MenuItem>
-                            <MenuItem value={4}>4 minutes</MenuItem>
-                            <MenuItem value={0}>Custom</MenuItem>
-                        </Select>
-                    </FormControl>
-                    {timeoutOption === 0 && (
-                        <TextField
-                            label="Custom Timeout (in minutes)"
-                            value={customTimeout}
-                            onChange={(e) => setCustomTimeout(e.target.value)}
-                            fullWidth
-                            margin="dense"
-                        />
-                    )}
-                </StyledDialogContent>
-                <DialogActions>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        onClick={handleCreateGame}
-                        color="primary"
-                        disabled={commitment === null || loading}
+                            {moveName}
+                        </Button>
+                    ))}
+                </div>
+                <TextField
+                    label="Opponent's Address"
+                    value={opponentAddress}
+                    onChange={(e) => setOpponentAddress(e.target.value)}
+                    fullWidth
+                    margin="dense"
+                />
+                <TextField
+                    label="Stake Amount"
+                    value={stakeAmount}
+                    onChange={(e) => setStakeAmount(e.target.value)}
+                    fullWidth
+                    margin="dense"
+                />
+                <FormControl fullWidth margin="dense">
+                    <InputLabel id="timeout-label">Timeout (in minutes)</InputLabel>
+                    <Select
+                        labelId="timeout-label"
+                        id="timeout-select"
+                        value={timeoutOption}
+                        onChange={(e) => setTimeoutOption(e.target.value)}
                     >
-                        {loading ? (
-                            <CircularProgress size={24} color="inherit" />
-                        ) : (
-                            'Create Game'
-                        )}
-                    </Button>
-                    <Button onClick={handleClose} color="secondary">
-                        Cancel
-                    </Button>
-                </DialogActions>
-                <Snackbar
-                    open={snackbarOpen}
-                    autoHideDuration={6000}
-                    onClose={handleSnackbarClose}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                    style={{ marginTop: '50px' }}
+                        <MenuItem value={1}>1 minute</MenuItem>
+                        <MenuItem value={2}>2 minutes</MenuItem>
+                        <MenuItem value={4}>4 minutes</MenuItem>
+                        <MenuItem value={0}>Custom</MenuItem>
+                    </Select>
+                </FormControl>
+                {timeoutOption === 0 && (
+                    <TextField
+                        label="Custom Timeout (in minutes)"
+                        value={customTimeout}
+                        onChange={(e) => setCustomTimeout(e.target.value)}
+                        fullWidth
+                        margin="dense"
+                    />
+                )}
+            </StyledDialogContent>
+            <DialogActions>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    onClick={handleCreateGame}
+                    color="primary"
+                    disabled={commitment === null || loading}
                 >
-                    <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
-                        {snackbarMessage}
-                    </Alert>
-                </Snackbar>
-
-
-
-            </Dialog>
-
-
-        </>
-
+                    {loading ? (
+                        <CircularProgress size={24} color="inherit" />
+                    ) : (
+                        'Create Game'
+                    )}
+                </Button>
+                <Button onClick={handleClose} color="secondary">
+                    Cancel
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 };
 
