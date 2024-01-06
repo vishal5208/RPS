@@ -128,10 +128,6 @@ export const getPropertyDetails = async () => {
 };
 
 export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
-
-
-
-    console.log("in game")
     try {
         const { success: connectSuccess } = await requestAccount();
 
@@ -159,6 +155,8 @@ export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
             const tx = await contract.createGame(c1Hash, opponentAddr, timeoutInSeconds, { value: stake.toString() });
             await tx.wait()
 
+            toast.success('Game created successfully!', { position: toast.POSITION.TOP_LEFT, autoClose: 5000, style: { marginTop: '60px', width: '300px' } });
+
 
             return {
                 success: true,
@@ -171,6 +169,22 @@ export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
             };
         }
     } catch (error) {
+        let reason = 'An error occurred. Please try again.';
+
+        if (error.data && error.data.reason) {
+            reason = error.data.reason;
+        } else if (error.reason) {
+            reason = error.reason;
+        } else if (error.message && error.message.includes("execution reverted")) {
+            reason = "Transaction failed: Execution reverted";
+        }
+
+        toast.error(reason, {
+            position: toast.POSITION.TOP_LEFT,
+            autoClose: 5000,
+            style: { marginTop: '60px', width: '300px' },
+        });
+
         return {
             success: false,
             message: error.message,
@@ -200,7 +214,7 @@ export const play = async (gameId, c2Move, stakeAmount) => {
             const tx = await contract.play(gameId, c2Move, { value: stake.toString() });
             await tx.wait();
 
-            toast.success('Entered into the game successfully!', { position: toast.POSITION.TOP_LEFT, autoClose: 5000, style: { marginTop: '60px', width: '300px' }, });
+            toast.success('Joined the game successfully!', { position: toast.POSITION.TOP_LEFT, autoClose: 5000, style: { marginTop: '60px', width: '300px' } });
 
 
             return {
