@@ -5,6 +5,8 @@ import JoinGame from './JoinGame';
 import ResolveGame from './ResolveGame';
 import TimeoutModal from './TimeoutModal';
 import GameHistory from './GameHistory';
+import { green, blue, orange, red } from '@mui/material/colors';
+
 
 const Home = () => {
     const [isCreateGameModalOpen, setCreateGameModalOpen] = useState(false);
@@ -71,7 +73,15 @@ const Home = () => {
                                                 ? handleOpenResolveGameModal
                                                 : handleTimeoutOpen
                                 }
-                                style={{ fontSize: '1.2rem' }}
+                                style={{
+                                    fontSize: '1.2rem',
+                                    background:
+                                        index === 1 ? green[500] :
+                                            index === 2 ? blue[500] :
+                                                index === 3 ? orange[500] :
+                                                    red[500],
+                                    color: 'white', // Text color is set to white
+                                }}
                             >
                                 {index === 1
                                     ? 'Start a New Game'
