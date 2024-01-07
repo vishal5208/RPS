@@ -81,8 +81,8 @@ const GameHistory = () => {
                 {row.slice().reverse().map((game, colIndex) => (
                     <Grid key={game.gameId} item xs={12} sm={6} md={4} lg={4} xl={4}>
                         <Card sx={{
-                            backgroundColor: '#2196F3',
-                            color: '#FFFFFF',
+                            backgroundColor: game.resolved ? '#DFF0D8' : '#2196F3',
+                            color: game?.resolved ? 'black' : '#FFFFFF',
                             borderRadius: 8,
                             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
                         }}>
