@@ -87,17 +87,22 @@ const GameHistory = () => {
                             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
                         }}>
                             <CardContent>
-                                <Typography variant="h6" sx={{ marginBottom: 1 }}>ID: {games.indexOf(game)}</Typography>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Typography variant="h6" sx={{ marginBottom: 1 }}>ID: {games.indexOf(game)}</Typography>
+                                    {game.resolved && (
+                                        <Typography variant="h6" sx={{ marginBottom: 1, color: '#4CAF50' }}>
+                                            Winner: {game.winner === game.j1 ? 'Player 1' : game.winner === game.j2 ? 'Player 2' : 'No winner'}
+                                        </Typography>
+                                    )}
+
+                                </div>
                                 <Divider sx={{ marginBottom: 1 }} />
                                 <Typography sx={{ marginBottom: 1 }}>P1: {truncateAddress(game?.j1?.toString())}</Typography>
                                 <Typography sx={{ marginBottom: 1 }}>P2: {truncateAddress(game?.j2?.toString())}</Typography>
                                 <Typography sx={{ marginBottom: 1 }}>Stake: {utils.formatEther(game?.stake)} ETH</Typography>
                                 <Typography sx={{ marginBottom: 1 }}>Timeout: {Math.floor(game?.timeout / 60)} minutes</Typography>
                                 <Typography sx={{ marginBottom: 1 }}>Last Action: {new Date(game?.lastAction * 1000).toLocaleString()}</Typography>
-                                <Typography sx={{ marginBottom: 1 }}>Resolved: {game?.resolved ? 'Yes' : 'No'}</Typography>
-                                {/* You may need to handle displaying c1Hash and c2 depending on their types */}
-                                {/* <Typography sx={{ marginBottom: 1 }}>c1Hash: {game?.c1Hash}</Typography> */}
-                                <Typography sx={{ marginBottom: 1 }}>P2's move: {game?.c2 === 0 ? "Hasn't played yet." : Object.keys(Moves).find(key => Moves[key] === game?.c2)}</Typography>
+                                <Typography sx={{ marginBottom: 1 }}>Resolved: {game?.resolved ? 'Yes' : 'No'}</Typography>                                <Typography sx={{ marginBottom: 1 }}>P2's move: {game?.c2 === 0 ? "Hasn't played yet." : Object.keys(Moves).find(key => Moves[key] === game?.c2)}</Typography>
                             </CardContent>
                         </Card>
                     </Grid>

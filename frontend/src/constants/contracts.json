@@ -1,6 +1,6 @@
 {
     "RPS": {
-        "address": "0x3A31ca4D37d1021FA08964DF8e3B19d0B27080AC",
+        "address": "0x4a58C0478125289c6e686e843Dbe59341B2B4Ea8",
         "abi": [
             {
                 "anonymous": false,
@@ -179,6 +179,11 @@
                         "internalType": "uint256",
                         "name": "timeout",
                         "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "winner",
+                        "type": "address"
                     }
                 ],
                 "stateMutability": "view",
