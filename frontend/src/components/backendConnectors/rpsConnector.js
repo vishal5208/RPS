@@ -7,6 +7,27 @@ const contractAddress = contractData.RPS.address;
 const contractAbi = contractData.RPS.abi;
 
 
+export const checkNetwork = async () => {
+    const targetNetworkId = "0x5";
+
+    if (window.ethereum) {
+        const currentChainId = await window.ethereum.request({
+            method: "eth_chainId",
+        });
+
+        localStorage.setItem("Current-Network-Id", currentChainId);
+
+        if (currentChainId == targetNetworkId) return { success: true };
+
+        // return false is network id is different
+        return {
+            success: false,
+            msg: "Please Open Metamask and Connect The Goelie network",
+        };
+    }
+};
+
+
 export const requestAccount = async (metaMask) => {
     try {
         if (typeof window.ethereum !== "undefined") {
@@ -32,18 +53,37 @@ export const requestAccount = async (metaMask) => {
                 params: [],
             });
 
+            localStorage.setItem("Wallet-Check", true);
+
             return { success: true };
         } else {
+            localStorage.setItem("Wallet-Check", false);
+
             return {
                 success: false,
                 msg: "please connect your wallet",
             };
         }
     } catch (error) {
+        localStorage.setItem("Wallet-Check", false);
+
         return {
             success: false,
             msg: error.message,
         };
+    }
+};
+
+export const switchToGoerli = async (provider, localStorageKeys) => {
+    try {
+        await provider.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: "0x5" }],
+        });
+
+        localStorage.setItem(localStorageKeys.walletCheck, true);
+    } catch (error) {
+        console.error("Failed to switch to Goerli:", error);
     }
 };
 
@@ -60,6 +100,9 @@ export const isConnected = async () => {
             if (chainId === "0x5") {
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const account = await provider.send("eth_requestAccounts", []);
+
+                localStorage.setItem("Wallet-Check", true);
+
                 return {
                     success: true,
                 };
@@ -72,12 +115,17 @@ export const isConnected = async () => {
             };
         }
     } catch (error) {
+        localStorage.setItem("Wallet-Check", false);
+
         return {
+
             success: false,
             msg: "Please Open Metamask and Connect",
         };
     }
 };
+
+
 
 
 export const getPropertyDetails = async () => {
