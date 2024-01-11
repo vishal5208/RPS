@@ -6,6 +6,7 @@ import ResolveGame from './ResolveGame';
 import TimeoutModal from './TimeoutModal';
 import GameHistory from './GameHistory';
 import { green, blue, orange, red } from '@mui/material/colors';
+import GameInstructions from './GameInstructions';
 
 
 const Home = () => {
@@ -45,6 +46,9 @@ const Home = () => {
             <Typography variant="h3" style={{ marginBottom: '20px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 Welcome to Rock, Paper, Scissors, Spock, Lizard Game Center
             </Typography>
+
+            <GameInstructions />
+            <div style={{ margin: '20px' }}></div>
 
             <Grid container spacing={2} alignItems="center" justifyContent="center">
                 {[1, 2, 3, 4].map((index) => (
