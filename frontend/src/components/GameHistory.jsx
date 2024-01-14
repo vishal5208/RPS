@@ -140,59 +140,72 @@ const GameHistory = () => {
                                 <Typography sx={{ marginBottom: 1 }}>Resolved: {game?.resolved ? 'Yes' : 'No'}</Typography>
                                 <Typography sx={{ marginBottom: 1 }}>P2's move: {game?.c2 === 0 ? "Hasn't played yet." : Object.keys(Moves).find(key => Moves[key] === game?.c2)}</Typography>
 
-                                {game?.c2 !== 0 ? (
-
-
-                                    <>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            size="large"
-                                            style={{
-                                                marginTop: '10px',
-                                                backgroundColor: 'grey',
-                                                color: 'white',
-                                            }}
-                                            disabled
-                                        >
-                                            P2 Played
-                                        </Button>
-                                        <Button
-                                            variant="contained"
-                                            color="info"
-                                            size="large"
-                                            onClick={() => handleResolveGameButtonClick(games.indexOf(game))}
-                                            style={{
-                                                marginTop: '10px',
-                                                backgroundColor: 'green',
-                                                color: 'white',
-                                            }}
-                                        >
-                                            Resolve Game
-                                        </Button>
-                                    </>
+                                {game.resolved ? (
+                                    <Button
+                                        variant="contained"
+                                        color="info"
+                                        size="large"
+                                        style={{
+                                            marginTop: '10px',
+                                            backgroundColor: 'grey',
+                                            color: 'white',
+                                        }}
+                                        disabled
+                                    >
+                                        Game Resolved
+                                    </Button>
                                 ) : (
                                     <div>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            size="large"
-                                            onClick={() => handleJoinGameButtonClick(games.indexOf(game), game.stake)}
-                                            style={{
-                                                marginTop: '10px',
-                                                backgroundColor: 'red',
-                                                color: 'white',
-                                                marginRight: '5px',
-                                                ...(game?.j2?.toString() !== currentAddress && {
+                                        {game?.c2 !== 0 ? (
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                size="large"
+                                                style={{
+                                                    marginTop: '10px',
                                                     backgroundColor: 'grey',
-                                                    cursor: 'not-allowed',
-                                                }),
-                                            }}
-                                            disabled={game?.j2?.toString() !== currentAddress}
-                                        >
-                                            Join Game
-                                        </Button>
-
+                                                    color: 'white',
+                                                }}
+                                                disabled
+                                            >
+                                                P2 Played
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                size="large"
+                                                onClick={() => handleJoinGameButtonClick(games.indexOf(game), game.stake)}
+                                                style={{
+                                                    marginTop: '10px',
+                                                    backgroundColor: 'red',
+                                                    color: 'white',
+                                                    marginRight: '5px',
+                                                    ...(game?.j2?.toString() !== currentAddress && {
+                                                        backgroundColor: 'grey',
+                                                        cursor: 'not-allowed',
+                                                    }),
+                                                }}
+                                                disabled={game?.j2?.toString() !== currentAddress}
+                                            >
+                                                {game?.j2?.toString() !== currentAddress ? 'Join Game' : 'P2 Played'}
+                                            </Button>
+                                        )}
+                                        {game?.j1?.toString() === currentAddress && (
+                                            <Button
+                                                variant="contained"
+                                                color="info"
+                                                size="large"
+                                                onClick={() => handleResolveGameButtonClick(games.indexOf(game))}
+                                                style={{
+                                                    marginTop: '10px',
+                                                    backgroundColor: 'green',
+                                                    color: 'white',
+                                                }}
+                                            >
+                                                Resolve Game
+                                            </Button>
+                                        )}
                                     </div>
                                 )}
                             </CardContent>
@@ -202,6 +215,8 @@ const GameHistory = () => {
             </Grid>
         ));
     };
+
+
 
     const truncateAddress = (address) => {
         if (address && address.length > 7) {

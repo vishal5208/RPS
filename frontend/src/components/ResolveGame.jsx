@@ -47,6 +47,8 @@ const ResolveGameModal = ({ open, handleClose, gameId }) => {
 
             const res = await solve(j1Move, gameId, salt);
 
+            setMove(0);
+            setSalt(0);
             handleClose();
         } catch (error) {
             console.error('Error resolving game:', error);
