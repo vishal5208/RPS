@@ -126,6 +126,35 @@ export const isConnected = async () => {
 };
 
 
+export const getCurrentAddress = async () => {
+    try {
+
+        const { success: connectSuccess } = await requestAccount();
+
+        if (connectSuccess) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+
+            const userAddress = await signer.getAddress();
+
+            return {
+                success: true,
+                currentAddress: userAddress
+
+            };
+        } else {
+            return {
+                success: false,
+                msg: "Please connect your wallet!",
+            };
+        }
+    } catch (error) {
+        return {
+            success: false,
+            msg: error.message,
+        };
+    }
+};
 
 
 export const getPropertyDetails = async () => {
@@ -137,14 +166,11 @@ export const getPropertyDetails = async () => {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
 
-
-
             const contract = new ethers.Contract(
                 contractAddress,
                 contractAbi,
                 signer
             );
-
 
             const userAddress = await signer.getAddress();
 
@@ -175,7 +201,7 @@ export const getPropertyDetails = async () => {
     }
 };
 
-export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
+export const createGame = async (move, opponentAddr, stakeAmount, salt, timeout) => {
     try {
         const { success: connectSuccess } = await requestAccount();
 
@@ -191,13 +217,10 @@ export const createGame = async (move, opponentAddr, stakeAmount, timeout) => {
                 signer
             );
 
-            // Get the user's address
-            const userAddress = await signer.getAddress();
 
-            const len = await contract.getGamesLength();
             const timeoutInSeconds = timeout * 60;
 
-            const c1Hash = await contract.hash(move, len.toString());
+            const c1Hash = await contract.hash(move, salt);
             const stake = ethers.utils.parseEther(stakeAmount);
 
             const tx = await contract.createGame(c1Hash, opponentAddr, timeoutInSeconds, { value: stake.toString() });
@@ -255,9 +278,9 @@ export const play = async (gameId, c2Move, stakeAmount) => {
                 signer
             );
 
-            const stake = ethers.utils.parseEther(stakeAmount);
+            // const stake = ethers.utils.parseEther(stakeAmount);
 
-            const tx = await contract.play(gameId, c2Move, { value: stake.toString() });
+            const tx = await contract.play(gameId, c2Move, { value: stakeAmount });
             await tx.wait();
 
             toast.success('Joined the game successfully!', { position: toast.POSITION.TOP_LEFT, autoClose: 5000, style: { marginTop: '60px', width: '300px' } });
@@ -297,7 +320,7 @@ export const play = async (gameId, c2Move, stakeAmount) => {
     }
 };
 
-export const solve = async (move, gameId) => {
+export const solve = async (move, gameId, salt) => {
     try {
         const { success: connectSuccess } = await requestAccount();
 
@@ -312,7 +335,7 @@ export const solve = async (move, gameId) => {
                 signer
             );
 
-            const tx = await contract.solve(move, gameId);
+            const tx = await contract.solve(move, gameId, salt);
             await tx.wait()
 
             toast.success('Game Solved successfully!', { position: toast.POSITION.TOP_LEFT, autoClose: 5000, style: { marginTop: '60px', width: '300px' } });

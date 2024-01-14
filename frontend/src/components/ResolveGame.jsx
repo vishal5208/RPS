@@ -23,9 +23,9 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
     padding: theme.spacing(2),
 }));
 
-const ResolveGameModal = ({ open, handleClose }) => {
+const ResolveGameModal = ({ open, handleClose, gameId }) => {
     const [move, setMove] = useState('');
-    const [gameId, setGameId] = useState('');
+    const [salt, setSalt] = useState('');
     const [loading, setLoading] = useState(false);
 
     const theme = useTheme();
@@ -44,9 +44,8 @@ const ResolveGameModal = ({ open, handleClose }) => {
             setLoading(true);
             const j1Move = Moves[move]
 
-            console.log('Move:', move);
-            console.log('Game ID:', gameId);
-            const res = await solve(j1Move, gameId);
+
+            const res = await solve(j1Move, gameId, salt);
 
             handleClose();
         } catch (error) {
@@ -89,9 +88,9 @@ const ResolveGameModal = ({ open, handleClose }) => {
                         ))}
                     </div>
                     <TextField
-                        label="Game ID"
-                        value={gameId}
-                        onChange={(e) => setGameId(e.target.value)}
+                        label="Salt(Enter the salt which you enterd while createing the game)"
+                        value={salt}
+                        onChange={(e) => setSalt(e.target.value)}
                         fullWidth
                         margin="dense"
                     />
@@ -101,7 +100,7 @@ const ResolveGameModal = ({ open, handleClose }) => {
                         variant="contained"
                         onClick={handleResolveGame}
                         color="primary"
-                        disabled={loading || !move || !gameId}
+                        disabled={loading || !move || !salt}
                     >
                         {loading ? (
                             <CircularProgress size={24} color="inherit" />

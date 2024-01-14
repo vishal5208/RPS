@@ -32,6 +32,7 @@ const CreateGame = ({ open, handleClose }) => {
     const [commitment, setCommitment] = useState(null);
     const [opponentAddress, setOpponentAddress] = useState('');
     const [stakeAmount, setStakeAmount] = useState('');
+    const [salt, setSalt] = useState(0);
     const [timeoutOption, setTimeoutOption] = useState(1);
     const [customTimeout, setCustomTimeout] = useState('');
     const [loading, setLoading] = useState(false);
@@ -49,7 +50,7 @@ const CreateGame = ({ open, handleClose }) => {
             setLoading(true)
             const selectedTimeout = timeoutOption === 0 ? customTimeout : timeoutOption;
             const move = Moves[commitment]
-            const res = await createGame(move, opponentAddress, stakeAmount, selectedTimeout);
+            const res = await createGame(move, opponentAddress, stakeAmount, salt, selectedTimeout);
             console.log(res)
             handleClose();
         } catch (error) {
@@ -101,6 +102,13 @@ const CreateGame = ({ open, handleClose }) => {
                         label="Stake Amount"
                         value={stakeAmount}
                         onChange={(e) => setStakeAmount(e.target.value)}
+                        fullWidth
+                        margin="dense"
+                    />
+                    <TextField
+                        label="Your Salt(Keep it secret, needed when resolving game)"
+                        value={salt}
+                        onChange={(e) => setSalt(e.target.value)}
                         fullWidth
                         margin="dense"
                     />

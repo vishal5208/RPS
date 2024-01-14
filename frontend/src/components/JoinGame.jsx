@@ -25,10 +25,10 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
     padding: theme.spacing(2),
 }));
 
-const JoinGame = ({ open, handleClose }) => {
-    const [gameId, setGameId] = useState('');
+const JoinGame = ({ open, handleClose, gameId, stakeAmount }) => {
+
     const [selectedMove, setSelectedMove] = useState('');
-    const [stakeAmount, setStakeAmount] = useState('');
+
     const [loading, setLoading] = useState(false);
 
     const theme = useTheme();
@@ -49,10 +49,12 @@ const JoinGame = ({ open, handleClose }) => {
         try {
             setLoading(true);
             const move = Moves[selectedMove];
-            const res = await play(gameId, move, stakeAmount);
-            setGameId('');
+
+            console.log(gameId, move, stakeAmount.toString())
+            const res = await play(gameId, move, stakeAmount.toString());
+
             setSelectedMove('');
-            setStakeAmount('');
+
             handleClose();
         } catch (error) {
             console.error(`Error handling in handle join game`, error);
@@ -73,13 +75,7 @@ const JoinGame = ({ open, handleClose }) => {
                 </StyledDialogTitle>
                 <StyledDialogContent theme={theme}>
                     <form onSubmit={handleSubmit}>
-                        <TextField
-                            label="Game ID"
-                            value={gameId}
-                            onChange={(e) => setGameId(e.target.value)}
-                            fullWidth
-                            margin="dense"
-                        />
+
                         <Typography variant="subtitle1">Select Move:</Typography>
                         <div>
                             {moveNames.map((move) => (
@@ -94,13 +90,7 @@ const JoinGame = ({ open, handleClose }) => {
                                 </Button>
                             ))}
                         </div>
-                        <TextField
-                            label="Stake Amount"
-                            value={stakeAmount}
-                            onChange={(e) => setStakeAmount(e.target.value)}
-                            fullWidth
-                            margin="dense"
-                        />
+
                     </form>
                 </StyledDialogContent>
                 <DialogActions>

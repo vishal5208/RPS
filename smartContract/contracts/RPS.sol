@@ -101,14 +101,14 @@ contract RPS is ReentrancyGuard {
         return keccak256(abi.encodePacked(_c, _salt));
     }
 
-    function solve(Move _c1, uint256 _gameId) external {
+    function solve(Move _c1, uint256 _gameId, uint256 _salt) external {
         Game storage game = games[_gameId];
 
         require(_c1 != Move.Null);
         require(game.c2 != Move.Null, "Player 2 has not made a move.");
         require(msg.sender == game.j1, "Only Player 1 can call");
         require(!game.resolved, "Game already resolved");
-        require(hash(uint8(_c1), _gameId) == game.c1Hash);
+        require(hash(uint8(_c1), _salt) == game.c1Hash);
 
         if (win(_c1, game.c2)) {
             game.winner = game.j1;

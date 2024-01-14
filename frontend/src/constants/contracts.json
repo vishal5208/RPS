@@ -1,6 +1,6 @@
 {
     "RPS": {
-        "address": "0x4a58C0478125289c6e686e843Dbe59341B2B4Ea8",
+        "address": "0xBa1cA1a839b5F600B3843668494b73238F521fA0",
         "abi": [
             {
                 "anonymous": false,
@@ -280,6 +280,11 @@
                     {
                         "internalType": "uint256",
                         "name": "_gameId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "_salt",
                         "type": "uint256"
                     }
                 ],
