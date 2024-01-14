@@ -199,9 +199,10 @@ const GameHistory = () => {
                                                 onClick={() => handleResolveGameButtonClick(games.indexOf(game))}
                                                 style={{
                                                     marginTop: '10px',
-                                                    backgroundColor: 'green',
+                                                    backgroundColor: game?.c2 === 0 ? 'grey' : 'green',
                                                     color: 'white',
                                                 }}
+                                                disabled={game?.c2 === 0}
                                             >
                                                 Resolve Game
                                             </Button>
