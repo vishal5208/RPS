@@ -27,9 +27,9 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
     padding: theme.spacing(2),
 }));
 
-const TimeoutModal = ({ open, handleClose }) => {
+const TimeoutModal = ({ open, handleClose, gameId }) => {
     const [timeoutType, setTimeoutType] = useState(0);
-    const [gameId, setGameId] = useState('');
+
     const [loading, setLoading] = useState(false);
 
     const theme = useTheme();
@@ -70,13 +70,7 @@ const TimeoutModal = ({ open, handleClose }) => {
                             <MenuItem value={1}>P2 Timeout</MenuItem>
                         </Select>
                     </FormControl>
-                    <TextField
-                        label="Game ID"
-                        value={gameId}
-                        onChange={(e) => setGameId(e.target.value)}
-                        fullWidth
-                        margin="dense"
-                    />
+
                 </StyledDialogContent>
                 <DialogActions>
                     <Button

@@ -4,12 +4,15 @@ import { Card, CardContent, Typography, Divider, Grid, Button } from '@mui/mater
 import { utils } from 'ethers';
 import JoinGame from './JoinGame';
 import ResolveGameModal from './ResolveGame';
+import TimeoutModal from './TimeoutModal';
 
 const GameHistory = () => {
     const [games, setGames] = useState([]);
     const [contractInstance, setContractInstance] = useState(null);
     const [isJoinGameModalOpen, setJoinGameModalOpen] = useState(false);
     const [isResolveGameModalOpen, setResolveGameModalOpen] = useState(false);
+    const [j1TimeoutOpen, setJ1TimeoutOpen] = useState(false);
+
 
     const [joinGameData, setJoinGameData] = useState({
         gameId: null,
@@ -17,6 +20,11 @@ const GameHistory = () => {
     });
 
     const [resolveGameData, setResolveGameData] = useState({
+        gameId: null
+
+    });
+
+    const [timiOutData, setTimiOutData] = useState({
         gameId: null
 
     });
@@ -99,10 +107,18 @@ const GameHistory = () => {
         setJoinGameData({ gameId, stakeAmount });
     };
 
-    const handleResolveGameButtonClick = (gameId, salt) => {
+    const handleResolveGameButtonClick = (gameId) => {
         setResolveGameModalOpen(true);
         setResolveGameData({ gameId });
     };
+
+    const handleTimeoutButtonClick = (gameId) => {
+        setJ1TimeoutOpen(true);
+        setTimiOutData({ gameId })
+
+    }
+
+
 
     const renderGameCards = () => {
         const cardsPerRow = 3;
@@ -140,75 +156,59 @@ const GameHistory = () => {
                                 <Typography sx={{ marginBottom: 1 }}>Resolved: {game?.resolved ? 'Yes' : 'No'}</Typography>
                                 <Typography sx={{ marginBottom: 1 }}>P2's move: {game?.c2 === 0 ? "Hasn't played yet." : Object.keys(Moves).find(key => Moves[key] === game?.c2)}</Typography>
 
-                                {game.resolved ? (
-                                    <Button
-                                        variant="contained"
-                                        color="info"
-                                        size="large"
-                                        style={{
-                                            marginTop: '10px',
-                                            backgroundColor: 'grey',
-                                            color: 'white',
-                                        }}
-                                        disabled
-                                    >
-                                        Game Resolved
-                                    </Button>
-                                ) : (
-                                    <div>
-                                        {game?.c2 !== 0 ? (
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                size="large"
-                                                style={{
-                                                    marginTop: '10px',
-                                                    backgroundColor: 'grey',
-                                                    color: 'white',
-                                                }}
-                                                disabled
-                                            >
-                                                P2 Played
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                size="large"
-                                                onClick={() => handleJoinGameButtonClick(games.indexOf(game), game.stake)}
-                                                style={{
-                                                    marginTop: '10px',
-                                                    backgroundColor: 'red',
-                                                    color: 'white',
-                                                    marginRight: '5px',
-                                                    ...(game?.j2?.toString() !== currentAddress && {
-                                                        backgroundColor: 'grey',
-                                                        cursor: 'not-allowed',
-                                                    }),
-                                                }}
-                                                disabled={game?.j2?.toString() !== currentAddress}
-                                            >
-                                                {game?.j2?.toString() !== currentAddress ? 'Join Game' : 'P2 Played'}
-                                            </Button>
-                                        )}
-                                        {game?.j1?.toString() === currentAddress && (
-                                            <Button
-                                                variant="contained"
-                                                color="info"
-                                                size="large"
-                                                onClick={() => handleResolveGameButtonClick(games.indexOf(game))}
-                                                style={{
-                                                    marginTop: '10px',
-                                                    backgroundColor: game?.c2 === 0 ? 'grey' : 'green',
-                                                    color: 'white',
-                                                }}
-                                                disabled={game?.c2 === 0}
-                                            >
-                                                Resolve Game
-                                            </Button>
-                                        )}
-                                    </div>
-                                )}
+                                <div>
+                                    {game?.j2?.toString() === currentAddress && game?.c2 === 0 && !game.resolved && (
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            size="large"
+                                            onClick={() => handleJoinGameButtonClick(games.indexOf(game), game.stake)}
+                                            style={{
+                                                marginTop: '10px',
+                                                backgroundColor: game?.c2 === 0 ? 'red' : 'grey',
+                                                color: 'white',
+                                                marginRight: '5px',
+                                                cursor: game?.c2 === 0 ? 'pointer' : 'not-allowed',
+                                            }}
+                                        >
+                                            Join Game
+                                        </Button>
+                                    )}
+
+                                    {!game?.resolved && (game?.j1?.toString() === currentAddress) && (
+                                        <Button
+                                            variant="contained"
+                                            color="info"
+                                            size="large"
+                                            onClick={() => handleResolveGameButtonClick(games.indexOf(game))}
+                                            style={{
+                                                marginTop: '10px',
+                                                backgroundColor: game?.c2 === 0 ? 'grey' : 'green',
+                                                color: 'white',
+                                                marginRight: '5px',
+                                            }}
+                                            disabled={game?.c2 === 0}
+                                        >
+                                            Resolve Game
+                                        </Button>
+                                    )}
+
+                                    {(game?.j1?.toString() === currentAddress || game?.j2?.toString() === currentAddress) && !game?.resolved && (
+                                        <Button
+                                            variant="contained"
+                                            color="warning"
+                                            size="large"
+                                            onClick={() => handleTimeoutButtonClick(games.indexOf(game))}
+                                            style={{
+                                                marginTop: '10px',
+                                                backgroundColor: '#FFC107',
+                                                color: 'white',
+                                            }}
+                                        >
+                                            Timeout
+                                        </Button>
+                                    )}
+                                </div>
                             </CardContent>
                         </Card>
                     </Grid>
@@ -216,6 +216,7 @@ const GameHistory = () => {
             </Grid>
         ));
     };
+
 
 
 
@@ -244,6 +245,13 @@ const GameHistory = () => {
                 gameId={resolveGameData.gameId}
 
             />
+
+            <TimeoutModal
+                open={j1TimeoutOpen}
+                handleClose={() => setJ1TimeoutOpen(false)}
+                gameId={timiOutData.gameId}
+            />
+
 
         </div>
     );
